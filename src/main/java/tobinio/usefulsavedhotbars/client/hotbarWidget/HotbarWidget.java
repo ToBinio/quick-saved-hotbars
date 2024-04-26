@@ -13,6 +13,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import tobinio.usefulsavedhotbars.UsefulSavedHotbars;
 
+import java.util.List;
+
 @Environment (EnvType.CLIENT)
 public abstract class HotbarWidget extends ClickableWidget {
 
@@ -25,12 +27,17 @@ public abstract class HotbarWidget extends ClickableWidget {
     protected final HotbarStorageEntry hotbar;
     protected final int hotbarIndex;
 
+    protected final List<ItemStack> items;
+
+
     public HotbarWidget(int x, int y, int hotbarIndex, HotbarStorageEntry hotbar, MinecraftClient client) {
         super(x, y, WIDTH, HEIGHT, Text.of("hotbar " + hotbarIndex));
 
         this.hotbar = hotbar;
         this.hotbarIndex = hotbarIndex;
         this.client = client;
+
+        this.items = hotbar.deserialize(this.client.world.getRegistryManager());
     }
 
     public void appendClickableNarrations(NarrationMessageBuilder builder) {

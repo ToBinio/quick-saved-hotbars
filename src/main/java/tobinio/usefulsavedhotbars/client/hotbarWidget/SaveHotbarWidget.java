@@ -40,7 +40,7 @@ public class SaveHotbarWidget extends HotbarWidget {
             context.drawTexture(BOARDER_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight(), this.getWidth(), this.getHeight());
         } else {
             for (int i = 0; i < PlayerInventory.getHotbarSize(); i++) {
-                ItemStack itemStack = hotbar.get(i);
+                ItemStack itemStack = this.items.get(i);
 
                 context.drawItem(itemStack, this.getX() + i * 16 + 2, this.getY() + 2);
             }
@@ -49,15 +49,11 @@ public class SaveHotbarWidget extends HotbarWidget {
 
     @Override
     public void apply() {
-
         ClientPlayerEntity clientPlayerEntity = client.player;
         HotbarStorage hotbarStorage = client.getCreativeHotbarStorage();
         HotbarStorageEntry hotbarStorageEntry = hotbarStorage.getSavedHotbar(this.hotbarIndex);
 
-        for (int i = 0; i < PlayerInventory.getHotbarSize(); ++i) {
-            hotbarStorageEntry.set(i, clientPlayerEntity.getInventory().getStack(i).copy());
-        }
-
+        hotbarStorageEntry.serialize(clientPlayerEntity.getInventory(), client.world.getRegistryManager());
         hotbarStorage.save();
     }
 }

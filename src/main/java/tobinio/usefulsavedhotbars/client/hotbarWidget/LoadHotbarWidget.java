@@ -11,14 +11,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import tobinio.usefulsavedhotbars.UsefulSavedHotbars;
 
+import java.util.List;
+
 @Environment (EnvType.CLIENT)
 public class LoadHotbarWidget extends HotbarWidget {
 
     public static final Identifier BASE_TEXTURE = new Identifier(UsefulSavedHotbars.modID, "textures/gui/container/base.png");
     public static final Identifier BOARDER_TEXTURE = new Identifier(UsefulSavedHotbars.modID, "textures/gui/container/selected.png");
 
+
     public LoadHotbarWidget(int x, int y, int hotbarIndex, HotbarStorageEntry hotbar, MinecraftClient client) {
         super(x, y, hotbarIndex, hotbar, client);
+
     }
 
     @Override
@@ -28,7 +32,7 @@ public class LoadHotbarWidget extends HotbarWidget {
         context.drawTexture(BASE_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight(), this.getWidth(), this.getHeight());
 
         for (int i = 0; i < PlayerInventory.getHotbarSize(); i++) {
-            ItemStack itemStack = hotbar.get(i);
+            ItemStack itemStack = this.items.get(i);
 
             context.drawItem(itemStack, this.getX() + i * 16 + 2, this.getY() + 2);
         }
@@ -40,8 +44,8 @@ public class LoadHotbarWidget extends HotbarWidget {
 
     @Override
     public void apply() {
-        for (int i = 0; i < this.hotbar.size(); i++) {
-            ItemStack itemStack = this.hotbar.get(i);
+        for (int i = 0; i < this.items.size(); i++) {
+            ItemStack itemStack = this.items.get(i);
 
             ItemStack itemStack2 = itemStack.isItemEnabled(this.client.world.getEnabledFeatures()) ? itemStack.copy() : ItemStack.EMPTY;
             this.client.player.getInventory().setStack(i, itemStack2);
