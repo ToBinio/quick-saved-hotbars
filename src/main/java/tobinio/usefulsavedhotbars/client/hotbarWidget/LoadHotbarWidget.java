@@ -13,11 +13,13 @@ import tobinio.usefulsavedhotbars.UsefulSavedHotbars;
 
 import java.util.List;
 
+import static tobinio.usefulsavedhotbars.UsefulSavedHotbars.id;
+
 @Environment (EnvType.CLIENT)
 public class LoadHotbarWidget extends HotbarWidget {
 
-    public static final Identifier BASE_TEXTURE = new Identifier(UsefulSavedHotbars.modID, "textures/gui/container/base.png");
-    public static final Identifier BOARDER_TEXTURE = new Identifier(UsefulSavedHotbars.modID, "textures/gui/container/selected.png");
+    public static final Identifier BASE_TEXTURE = id("textures/gui/container/base.png");
+    public static final Identifier BOARDER_TEXTURE = id("textures/gui/container/selected.png");
 
 
     public LoadHotbarWidget(int x, int y, int hotbarIndex, HotbarStorageEntry hotbar, MinecraftClient client) {

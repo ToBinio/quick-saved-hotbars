@@ -13,11 +13,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import tobinio.usefulsavedhotbars.UsefulSavedHotbars;
 
+import static tobinio.usefulsavedhotbars.UsefulSavedHotbars.id;
+
 @Environment (EnvType.CLIENT)
 public class SaveHotbarWidget extends HotbarWidget {
 
-    public static final Identifier BASE_TEXTURE = new Identifier(UsefulSavedHotbars.modID, "textures/gui/container/base.png");
-    public static final Identifier BOARDER_TEXTURE = new Identifier(UsefulSavedHotbars.modID, "textures/gui/container/selected.png");
+    public static final Identifier BASE_TEXTURE = id("textures/gui/container/base.png");
+    public static final Identifier BOARDER_TEXTURE = id("textures/gui/container/selected.png");
 
     public SaveHotbarWidget(int x, int y, int hotbarIndex, HotbarStorageEntry hotbar, MinecraftClient client) {
         super(x, y, hotbarIndex, hotbar, client);

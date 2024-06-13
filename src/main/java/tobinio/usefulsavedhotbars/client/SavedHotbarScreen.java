@@ -20,10 +20,12 @@ import tobinio.usefulsavedhotbars.client.hotbarWidget.SaveHotbarWidget;
 import java.util.ArrayList;
 import java.util.List;
 
+import static tobinio.usefulsavedhotbars.UsefulSavedHotbars.id;
+
 @Environment (EnvType.CLIENT)
 public class SavedHotbarScreen extends Screen {
 
-    public static final Identifier BG_TEXTURE = new Identifier(UsefulSavedHotbars.modID, "textures/gui/container/background.png");
+    public static final Identifier BG_TEXTURE = id("textures/gui/container/background.png");
 
     public static final int BG_WIDTH = 162;
     public static final int BG_HEIGHT = 199;
