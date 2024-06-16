@@ -2,15 +2,19 @@
 
 a fabric mod that makes saved-hotbars a lot simpler to use
 
-Now you don't have to remember which saved-hotbar has which number you can simply select it in a
-`GameModeSelectionScreen` (f3+f4) like menu
+Now you don't have to remember which saved-hotbar has which number you can simply select it in a gui.
 
 ## usage
 
-Press f3 + f6 to open the loading screen. Keep f3 pressed when you let go the currently selected hotbar will be loaded.
-select with your mouse a hotbar or press f6 to switch between the saved hotbars.
+Simply Press f6 (load) or f7 (save) and the appropriate menu will open.
+There simply click on the row you want to load/save and the action will be done.
 
-The same is possible with f3 + f7 only this time you save a saved-hotbar.
+### F3 - mode
+
+Alternatively you can also use a `GameModeSelectionScreen` (f3+f4) like menu.
+
+for this you first need to bind 2 new keys in the settings.
+Pressing f3 + `<key>` will open the menu. Letting go of f3 will load/save the currently selected hotbar.
 
 ### features
 

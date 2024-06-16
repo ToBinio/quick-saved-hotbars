@@ -12,7 +12,6 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.NarratorManager;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
-import tobinio.usefulsavedhotbars.UsefulSavedHotbars;
 import tobinio.usefulsavedhotbars.client.hotbarWidget.HotbarWidget;
 import tobinio.usefulsavedhotbars.client.hotbarWidget.LoadHotbarWidget;
 import tobinio.usefulsavedhotbars.client.hotbarWidget.SaveHotbarWidget;
@@ -62,9 +61,9 @@ public class SavedHotbarScreen extends Screen {
             HotbarStorageEntry hotbar = hotbars.getSavedHotbar(i);
 
             switch (this.type) {
-                case LOAD ->
+                case LOAD_F3, LOAD ->
                         this.hotbarWidgets.add(new LoadHotbarWidget(x, y + i * (HotbarWidget.HEIGHT - 1), i, hotbar, client));
-                case SAVE ->
+                case SAVE_F3, SAVE ->
                         this.hotbarWidgets.add(new SaveHotbarWidget(x, y + i * (HotbarWidget.HEIGHT - 1), i, hotbar, client));
             }
         }
@@ -73,7 +72,8 @@ public class SavedHotbarScreen extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 
-        this.checkForClose();
+        if (this.type == Type.LOAD_F3 || this.type == Type.SAVE_F3)
+            this.checkForCloseF3();
 
         if (!this.mouseUsedForSelection) {
             this.lastMouseX = mouseX;
@@ -89,8 +89,10 @@ public class SavedHotbarScreen extends Screen {
 
         context.drawTexture(BG_TEXTURE, this.width / 2 - BG_WIDTH / 2, this.height / 2 - BG_HEIGHT / 2, 0, 0, BG_WIDTH, BG_HEIGHT, BG_WIDTH, BG_HEIGHT);
 
-        String text = this.type == Type.SAVE ? "Save" : "Load";
-        text += " Hotbar " + (this.selected + 1);
+        String text = switch (this.type) {
+            case LOAD_F3, LOAD -> "Load Hotbar " + (this.selected + 1);
+            case SAVE_F3, SAVE -> "Save Hotbar " + (this.selected + 1);
+        };
 
         context.drawCenteredTextWithShadow(this.textRenderer, text, this.width / 2, this.height / 2 - 92, -1);
 
@@ -104,12 +106,44 @@ public class SavedHotbarScreen extends Screen {
         }
     }
 
-    private void checkForClose() {
+    private void checkForCloseF3() {
         if (!InputUtil.isKeyPressed(this.client.getWindow().getHandle(), GLFW.GLFW_KEY_F3)) {
-
-            this.hotbarWidgets.get(selected).apply();
-            this.close();
+            apply();
         }
+    }
+
+    private boolean checkForClose(int keyCode, int scanCode) {
+        switch (this.type) {
+            case LOAD -> {
+                if (UsefulSavedHotbarsClient.LoadHotbarsKeyBinding.matchesKey(keyCode, scanCode)) {
+                    apply();
+                    return true;
+                }
+            }
+            case SAVE -> {
+                if (UsefulSavedHotbarsClient.SaveHotbarsKeyBinding.matchesKey(keyCode, scanCode)) {
+                    apply();
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void apply() {
+        this.hotbarWidgets.get(selected).apply();
+        this.close();
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (mouseUsedForSelection) {
+            apply();
+            return true;
+        }
+
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
@@ -120,18 +154,28 @@ public class SavedHotbarScreen extends Screen {
             this.mouseUsedForSelection = false;
 
             return true;
-        } else {
-            return super.keyPressed(keyCode, scanCode, modifiers);
         }
+
+        if (checkForClose(keyCode, scanCode)) {
+            return true;
+        }
+
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     private boolean toggleKeyPressed(int keyCode, int scanCode) {
         switch (this.type) {
+            case LOAD_F3 -> {
+                return UsefulSavedHotbarsClient.LoadHotbarsKeyBindingF3.matchesKey(keyCode, scanCode);
+            }
+            case SAVE_F3 -> {
+                return UsefulSavedHotbarsClient.SaveHotbarsKeyBindingF3.matchesKey(keyCode, scanCode);
+            }
             case LOAD -> {
-                return UsefulSavedHotbarsClient.LoadHotbarsKeyBinding.matchesKey(keyCode, scanCode);
+                return UsefulSavedHotbarsClient.SaveHotbarsKeyBinding.matchesKey(keyCode, scanCode);
             }
             case SAVE -> {
-                return UsefulSavedHotbarsClient.SaveHotbarsKeyBinding.matchesKey(keyCode, scanCode);
+                return UsefulSavedHotbarsClient.LoadHotbarsKeyBinding.matchesKey(keyCode, scanCode);
             }
             default -> {
                 return false;
@@ -140,7 +184,6 @@ public class SavedHotbarScreen extends Screen {
     }
 
     public enum Type {
-        LOAD,
-        SAVE
+        LOAD_F3, SAVE_F3, LOAD, SAVE
     }
 }

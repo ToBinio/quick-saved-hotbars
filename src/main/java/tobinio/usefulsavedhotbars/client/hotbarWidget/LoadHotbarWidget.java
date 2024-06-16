@@ -9,9 +9,6 @@ import net.minecraft.client.option.HotbarStorageEntry;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import tobinio.usefulsavedhotbars.UsefulSavedHotbars;
-
-import java.util.List;
 
 import static tobinio.usefulsavedhotbars.UsefulSavedHotbars.id;
 
@@ -55,6 +52,5 @@ public class LoadHotbarWidget extends HotbarWidget {
         }
 
         this.client.player.playerScreenHandler.sendContentUpdates();
-
     }
 }
