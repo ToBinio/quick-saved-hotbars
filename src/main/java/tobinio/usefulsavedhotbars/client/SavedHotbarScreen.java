@@ -8,6 +8,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.HotbarStorage;
 import net.minecraft.client.option.HotbarStorageEntry;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.NarratorManager;
 import net.minecraft.util.Identifier;
@@ -61,10 +62,16 @@ public class SavedHotbarScreen extends Screen {
             HotbarStorageEntry hotbar = hotbars.getSavedHotbar(i);
 
             switch (this.type) {
-                case LOAD_F3, LOAD ->
-                        this.hotbarWidgets.add(new LoadHotbarWidget(x, y + i * (HotbarWidget.HEIGHT - 1), i, hotbar, client));
-                case SAVE_F3, SAVE ->
-                        this.hotbarWidgets.add(new SaveHotbarWidget(x, y + i * (HotbarWidget.HEIGHT - 1), i, hotbar, client));
+                case LOAD_F3, LOAD -> this.hotbarWidgets.add(new LoadHotbarWidget(x,
+                        y + i * (HotbarWidget.HEIGHT - 1),
+                        i,
+                        hotbar,
+                        client));
+                case SAVE_F3, SAVE -> this.hotbarWidgets.add(new SaveHotbarWidget(x,
+                        y + i * (HotbarWidget.HEIGHT - 1),
+                        i,
+                        hotbar,
+                        client));
             }
         }
     }
@@ -87,7 +94,16 @@ public class SavedHotbarScreen extends Screen {
 
         RenderSystem.enableBlend();
 
-        context.drawTexture(BG_TEXTURE, this.width / 2 - BG_WIDTH / 2, this.height / 2 - BG_HEIGHT / 2, 0, 0, BG_WIDTH, BG_HEIGHT, BG_WIDTH, BG_HEIGHT);
+        context.drawTexture(RenderLayer::getGuiTexturedOverlay,
+                BG_TEXTURE,
+                this.width / 2 - BG_WIDTH / 2,
+                this.height / 2 - BG_HEIGHT / 2,
+                0,
+                0,
+                BG_WIDTH,
+                BG_HEIGHT,
+                BG_WIDTH,
+                BG_HEIGHT);
 
         String text = switch (this.type) {
             case LOAD_F3, LOAD -> "Load Hotbar " + (this.selected + 1);

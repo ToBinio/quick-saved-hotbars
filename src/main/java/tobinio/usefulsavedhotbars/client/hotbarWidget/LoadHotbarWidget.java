@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.option.HotbarStorageEntry;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -28,7 +29,16 @@ public class LoadHotbarWidget extends HotbarWidget {
     public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         RenderSystem.enableBlend();
 
-        context.drawTexture(BASE_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight(), this.getWidth(), this.getHeight());
+        context.drawTexture(RenderLayer::getGuiTexturedOverlay,
+                BASE_TEXTURE,
+                this.getX(),
+                this.getY(),
+                0,
+                0,
+                this.getWidth(),
+                this.getHeight(),
+                this.getWidth(),
+                this.getHeight());
 
         for (int i = 0; i < PlayerInventory.getHotbarSize(); i++) {
             ItemStack itemStack = this.items.get(i);
@@ -37,7 +47,16 @@ public class LoadHotbarWidget extends HotbarWidget {
         }
 
         if (this.selected) {
-            context.drawTexture(BOARDER_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight(), this.getWidth(), this.getHeight());
+            context.drawTexture(RenderLayer::getGuiTexturedOverlay,
+                    BOARDER_TEXTURE,
+                    this.getX(),
+                    this.getY(),
+                    0,
+                    0,
+                    this.getWidth(),
+                    this.getHeight(),
+                    this.getWidth(),
+                    this.getHeight());
         }
     }
 
